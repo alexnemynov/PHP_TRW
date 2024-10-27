@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
@@ -28,7 +28,7 @@ $connection = DriverManager::getConnection($connectionParams);
 
 $entityManager = new EntityManager(
     $connection,
-    ORMSetup::createAttributeMetadataConfiguration([__DIR__ . 'app/Entity'])
+    ORMSetup::createAttributeMetadataConfiguration([__DIR__ . '/app/Entity'])
 );
 
 return DependencyFactory::fromEntityManager($config, new ExistingEntityManager($entityManager));
