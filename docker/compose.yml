@@ -1,0 +1,49 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: alexnemynov-app
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ../src:/var/www
+      - ./local.ini:/usr/local/etc/php/conf.d/local.ini
+
+  nginx:
+    image: nginx:1.27.1-alpine
+    container_name: alexnemynov-nginx
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - ../src:/var/www
+      - ./nginx:/etc/nginx/conf.d
+
+  db:
+    container_name: alexnemynov-db
+    image: mysql:9.0
+    volumes:
+      - ./storage/mysql:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+
+  mailhog:
+    container_name: alexnemynov-mailhog
+    image: mailhog/mailhog
+    restart: always
+    logging:
+      driver: "none"
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+  cron:
+    container_name: alexnemynov-cron
+    build: ./cron
+    volumes:
+      - ../src:/var/www
+      - ./log/cron:/var/log/cron
