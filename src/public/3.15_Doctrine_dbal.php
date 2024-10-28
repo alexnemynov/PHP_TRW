@@ -47,6 +47,7 @@ $stmt = $conn->fetchAllAssociative('SELECT * FROM invoices_new WHERE id IN (?)',
 //    // some logic
 //));
 
+// Base Query Builder
 $builder = $conn->createQueryBuilder();
 
 $invoice = $builder

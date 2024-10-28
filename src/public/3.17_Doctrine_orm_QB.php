@@ -34,7 +34,8 @@ try {
     $entityManager->beginTransaction();
     $queryBuilder = $entityManager->createQueryBuilder();
 
-// WHERE amount > :amount AND (status = :status OR createdAt > :date)
+    // ORM Query Builder
+    // WHERE amount > :amount AND (status = :status OR createdAt > :date)
     $query = $queryBuilder
         ->select('i', 'it')
         ->from(Invoice::class, 'i')

@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 #[Entity]
-#[Table(name: 'invoices_new')]
+#[Table(name: 'invoices')]
 #[HasLifecycleCallbacks]
 class Invoice
 {
@@ -54,6 +54,7 @@ class Invoice
     public function onPrePersist(LifecycleEventArgs $args): void
     {
         $this->createdAt = new \DateTime();
+        $this->dueDate = new \DateTime('next year');
     }
 
     public function getId(): int
@@ -97,13 +98,6 @@ class Invoice
         return $this;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): Invoice
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function addItem(InvoiceItem $item): Invoice
     {
         $item->setInvoice($this); // ассоциировать обьект с инвойсом
@@ -116,5 +110,15 @@ class Invoice
     public function getItems(): Collection
     {
         return $this->items;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function getDueDate(): \DateTime
+    {
+        return $this->dueDate;
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Controllers;
 
 use App\Attributes\Get;
 use App\Attributes\Post;
+use App\Models\Email;
 use App\View;
 use Symfony\Component\Mime\Address;
 
@@ -36,10 +37,11 @@ Hello $firstName,
 <br /><br />
 Thank you for signing up!
 HTMLBody;
-        (new \App\Models\Email())->queue(
-            (new Address($email)),
-            (new Address('support@example.com', 'support')),
-            'Welcome',
+
+        (new Email())->queue(
+            new Address($email),
+            new Address('support@example.com', 'Support'),
+            'Welcome!',
             $html,
             $text
         );

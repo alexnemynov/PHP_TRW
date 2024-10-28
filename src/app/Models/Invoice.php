@@ -1,47 +1,39 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\InvoiceStatus;
-use App\Model;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property int $invoice_number
+ * @property float $amount
+ * @property InvoiceStatus $status
+ * @property Carbon $created_at
+ * @property Carbon $due_date
+ *
+ * @property-read Collection $items
+ */
 class Invoice extends Model
 {
-    public function all(InvoiceStatus $status): array
+//    protected $table = 'invoices'; There are convention of naming and it occurs automatically
+    public const UPDATED_AT = null; // to disable automatic set
+
+    // явно указываем, как преобразовать типы данных
+    protected $casts = [
+        'created_at' => 'datetime',
+        'due_date' => 'datetime',
+        'status' => InvoiceStatus::class,
+    ];
+
+    public function items(): HasMany
     {
-        return $this->db->createQueryBuilder()->select('id', 'invoice_number', 'amount', 'status')
-            ->from('invoices_new')
-            ->where('status = ?')
-            ->setParameter(0, $status->value)
-            ->fetchAllAssociative();
+        return $this->hasMany(InvoiceItem::class);
     }
 }
-
-//    public function create(float $amount, int $userId): int
-//    {
-//        $stmt = $this->db->prepare(
-//            "INSERT INTO invoices (amount, user_id)
-//                   VALUES (?, ?)"
-//        );
-//
-//        $stmt->execute([$amount, $userId]);
-//
-//        return (int) $this->db->lastInsertId();
-//    }
-//
-//    public function find(int $invoiceId): array
-//    {
-//        $stmt = $this->db->prepare(
-//            "SELECT invoices.id, amount, full_name
-//            FROM invoices
-//            LEFT JOIN users ON invoices.user_id = users.id
-//            WHERE invoices.id = ?"
-//        );
-//
-//        $stmt->execute([$invoiceId]);
-//
-//        $invoice = $stmt->fetch();
-//
-//        return $invoice ? $invoice : [];
-//    }
-//}
