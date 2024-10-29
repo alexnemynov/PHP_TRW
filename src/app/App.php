@@ -9,10 +9,12 @@ use App\Services\PaymentGatewayService;
 use App\Services\PaymentGatewayServiceInterface;
 use Dotenv\Dotenv;
 use Symfony\Component\Mailer\MailerInterface;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
 
 class App
 {
-    private static DB $db;
     private Config $config;
 
     public function __construct(
@@ -22,11 +24,6 @@ class App
     ) {
     }
 
-    public static function db(): DB
-    {
-        return static::$db;
-    }
-
     public function boot(): static
     {
         $dotenv = Dotenv::createImmutable(dirname(__DIR__));
@@ -34,10 +31,10 @@ class App
 
         $this->config = new Config($_ENV);
 
-        static::$db = new DB($this->config->db ?? []);
+        $this->initDb($this->config->db);
 
-        $this->container->set(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
-        $this->container->set(MailerInterface::class, fn() => new CustomMailer($this->config->mailer['dsn']));
+        $this->container->bind(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
+        $this->container->bind(MailerInterface::class, fn() => new CustomMailer($this->config->mailer['dsn']));
 
         return $this;
     }
@@ -51,5 +48,18 @@ class App
 
             echo View::make('error/404');
         }
+    }
+
+    public function initDb(array $config): void
+    {
+        $capsule = new Capsule();
+
+        $capsule->addConnection($config);
+        // Set the event dispatcher used by Eloquent models... (optional)
+        $capsule->setEventDispatcher(new Dispatcher($this->container));
+        // Make this Capsule instance available globally via static methods... (optional)
+        $capsule->setAsGlobal();
+        // Setup the Eloquent ORM... (optional; unless you've used setEventDispatcher())
+        $capsule->bootEloquent();
     }
 }

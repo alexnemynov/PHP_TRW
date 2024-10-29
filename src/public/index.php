@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\App;
-use App\Container;
+use Illuminate\Container\Container;
 use App\Controllers\HomeController;
 use App\Controllers\InvoiceController;
 use App\Controllers\UserController;

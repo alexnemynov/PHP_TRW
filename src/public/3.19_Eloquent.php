@@ -14,7 +14,7 @@ require_once __DIR__ . '/../eloquent.php';
 // base query builder
 $invoices = Manager::table('invoices')->where('status', InvoiceStatus::Paid)->get();
 var_dump($invoices);
-exit();
+//exit();
 
 $invoiceId = 1;
 Invoice::query()->where('id', '=', $invoiceId)->update(['status' => InvoiceStatus::Paid]);
@@ -32,7 +32,7 @@ Invoice::query()->where('status', InvoiceStatus::Paid)->get()->each(function ($i
 //    $invoice->push();
 });
 
-exit();
+//exit();
 Manager::connection()->transaction(function (): void {
     $invoice = new Invoice();
 
