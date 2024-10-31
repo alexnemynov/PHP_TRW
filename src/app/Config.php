@@ -5,6 +5,7 @@ namespace App;
 /**
  * @property-read ?array $db
  * @property-read ?array $mailer
+ * @property-read ?array $apiKeys
  */
 class Config
 {
@@ -25,8 +26,12 @@ class Config
                 ],
             'mailer' => [
                 'dsn'           => $env['MAILER_DSN'] ?? '',
-                ]
-        ];
+                ],
+            'apiKeys' => [
+                'emailable' => $env['EMAILABLE_API_KEY'] ?? '',
+                'abstract_api' => $env['ABSTRACT_API_KEY'] ?? '',
+                ],
+            ];
     }
 
     public function __get(string $name)
