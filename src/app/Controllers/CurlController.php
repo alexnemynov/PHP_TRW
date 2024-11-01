@@ -6,7 +6,6 @@ namespace App\Controllers;
 
 use App\Attributes\Get;
 use App\Contracts\EmailValidationInterface;
-use App\Services\Emailable\EmailValidationService;
 
 class CurlController
 {
@@ -19,6 +18,10 @@ class CurlController
     {
         $email = 'aerohcss@gmail.com';
         $result = $this->emailValidationService->verify($email);
+
+        $score = $result->score;
+        $isDeliverable = $result->isDeliverable;
+        var_dump($score, $isDeliverable);
 
         echo '<pre>';
         print_r($result);
