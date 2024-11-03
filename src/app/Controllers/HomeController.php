@@ -17,6 +17,7 @@ class HomeController
     #[Route('/home', HttpMethod::Get)]
     public function index(): View
     {
+        throw new \RuntimeException('Test');
         return View::make('index');
     }
 
