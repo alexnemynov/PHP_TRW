@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controllers;
 
@@ -14,7 +14,7 @@ use App\View;
 class HomeController
 {
     #[Get('/')]
-    #[Route('/home', HttpMethod::Head)]
+    #[Route('/home', HttpMethod::Get)]
     public function index(): View
     {
         return View::make('index');
@@ -23,12 +23,10 @@ class HomeController
     #[Post('/')]
     public function store()
     {
-
     }
 
     #[Put('/')]
     public function update()
     {
-
     }
 }

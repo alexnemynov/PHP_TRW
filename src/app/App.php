@@ -14,6 +14,9 @@ use Symfony\Component\Mailer\MailerInterface;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
+use Twig\Environment;
+use Twig\Extra\Intl\IntlExtension;
+use Twig\Loader\FilesystemLoader;
 
 class App
 {
@@ -35,6 +38,14 @@ class App
 
         $this->initDb($this->config->db);
 
+        $loader = new FilesystemLoader(VIEW_PATH);
+        $twig = new Environment($loader, [
+            'cache' => STORAGE_PATH . '/cache',
+            'auto_reload' => true,
+        ]);
+        $twig->addExtension(new IntlExtension());
+
+        $this->container->instance(Environment::class, $twig);
         $this->container->bind(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
         $this->container->bind(MailerInterface::class, fn() => new CustomMailer($this->config->mailer['dsn']));
         $this->container->bind(

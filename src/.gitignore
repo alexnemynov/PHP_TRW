@@ -479,3 +479,4 @@ composer.phar
 *.scss.map
 
 .env
+/storage/
