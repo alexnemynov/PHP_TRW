@@ -4,30 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Attributes\Get;
-use App\Attributes\Post;
-use App\Attributes\Put;
-use App\Attributes\Route;
-use App\Enums\HttpMethod;
-use App\View;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Views\Twig;
 
 class HomeController
 {
-    #[Get('/')]
-    #[Route('/home', HttpMethod::Get)]
-    public function index(): View
+    public function index(Request $request, Response $response, $args): Response
     {
-        throw new \RuntimeException('Test');
-        return View::make('index');
-    }
+        $view = Twig::fromRequest($request);
 
-    #[Post('/')]
-    public function store()
-    {
-    }
-
-    #[Put('/')]
-    public function update()
-    {
+        return $view->render($response, 'index.twig');
     }
 }
