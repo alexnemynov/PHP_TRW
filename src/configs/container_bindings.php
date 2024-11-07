@@ -15,7 +15,7 @@ return [
     Config::class => create(Config::class)->constructor($_ENV),
     EntityManager::class => fn(Config $config) => new EntityManager(
         DriverManager::getConnection($config->db),
-        ORMSetup::createAttributeMetadataConfiguration([dirname(__DIR__) . 'app/Entity']),
+        ORMSetup::createAttributeMetadataConfiguration([dirname(__DIR__) . '/app/Entity']),
     ),
     Twig::class => function (Config $config) {
         $twig = Twig::create(

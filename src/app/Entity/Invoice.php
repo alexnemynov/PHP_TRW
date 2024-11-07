@@ -30,8 +30,8 @@ class Invoice
     #[Column(name: 'invoice_number')]
     private int $invoiceNumber;
 
-    #[Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private float $amount;
+    #[Column(type: Types::BIGINT)]
+    private int $amount;
 
     #[Column]
     private InvoiceStatus $status;
